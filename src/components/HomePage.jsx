@@ -663,9 +663,11 @@ const HomePage = () => {
                     </div>
                   ))}
                 </div>
-                <button className="mt-8 bg-green-500 text-white px-8 py-3 rounded-md hover:bg-green-600 transition-colors font-semibold">
+                <Link to='/products'>
+                  <button className="mt-8 bg-green-500 text-white px-8 py-3 rounded-md hover:bg-green-600 transition-colors font-semibold">
                   Buy Now!
                 </button>
+                </Link>
               </div>
               {/* RIGHT: Image */}
               <div className="lg:w-1/2 flex items-center justify-center p-8">
@@ -680,7 +682,7 @@ const HomePage = () => {
         </div>
       </div>
 
-      {/* Our Products / New Arrival */}
+      {/* Our Products */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div>
           <div className="flex items-center space-x-2 mb-4">
@@ -697,7 +699,7 @@ const HomePage = () => {
         </div>
 
         <div className="text-center mt-8">
-          <Button variant="primary">View All Products</Button>
+          <Link to='/products'><Button variant="primary">View All Products</Button></Link>
         </div>
       </div>
 
@@ -722,9 +724,11 @@ const HomePage = () => {
             <div className="absolute bottom-0 left-0 right-0 p-8 bg-gradient-to-t from-black via-black/50 to-transparent">
               <h3 className="text-2xl font-bold text-white mb-2">PlayStation 5</h3>
               <p className="text-gray-300 mb-4">Black and White version of the PS5 coming out on sale.</p>
-              <button className="text-white border-b-2 border-white pb-1 hover:text-green-500 hover:border-green-500 transition-colors">
+              <Link to='/products'>
+                <button className="text-white border-b-2 border-white pb-1 hover:text-green-500 hover:border-green-500 transition-colors">
                 Shop Now →
               </button>
+              </Link>
             </div>
           </div>
 
@@ -740,9 +744,11 @@ const HomePage = () => {
               <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black via-black/50 to-transparent">
                 <h3 className="text-xl font-bold text-white mb-1">Women's Collections</h3>
                 <p className="text-gray-300 text-sm mb-3">Featured women collections that give you another vibe.</p>
-                <button className="text-white border-b-2 border-white pb-1 text-sm hover:text-green-500 hover:border-green-500 transition-colors">
+                <Link to='/products'>
+                  <button className="text-white border-b-2 border-white pb-1 text-sm hover:text-green-500 hover:border-green-500 transition-colors">
                   Shop Now →
                 </button>
+                </Link>
               </div>
             </div>
 
@@ -758,9 +764,11 @@ const HomePage = () => {
                 <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black via-black/50 to-transparent">
                   <h3 className="text-lg font-bold text-white mb-1">Perfume</h3>
                   <p className="text-gray-300 text-xs mb-2">Coming Now</p>
-                  <button className="text-white border-b-2 border-white pb-1 text-xs hover:text-green-500 hover:border-green-500 transition-colors">
+                  <Link to='/products'>
+                    <button className="text-white border-b-2 border-white pb-1 text-xs hover:text-green-500 hover:border-green-500 transition-colors">
                     Shop Now →
                   </button>
+                  </Link>
                 </div>
               </div>
 
@@ -774,9 +782,11 @@ const HomePage = () => {
                 <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black via-black/50 to-transparent">
                   <h3 className="text-lg font-bold text-white mb-1">Speakers</h3>
                   <p className="text-gray-300 text-xs mb-2">Coming Now</p>
-                  <button className="text-white border-b-2 border-white pb-1 text-xs hover:text-green-500 hover:border-green-500 transition-colors">
+                  <Link to='/products'>
+                    <button className="text-white border-b-2 border-white pb-1 text-xs hover:text-green-500 hover:border-green-500 transition-colors">
                     Shop Now →
                   </button>
+                  </Link>
                 </div>
               </div>
             </div>

@@ -39,7 +39,7 @@ const Navbar = () => {
             </div>
 
             <Link
-              to="/"
+              to="/products"
               className="text-white font-semibold underline hover:text-yellow-400 transition-colors"
             >
               ShopNow
