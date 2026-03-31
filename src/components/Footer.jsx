@@ -27,7 +27,7 @@ const Footer = () => {
             <h4 className="font-semibold mb-4">Support</h4>
             <address className="not-italic text-gray-400 text-sm space-y-2">
               <p>11 Qurba Street, Nasr City,<br />DH 1515, Cairo.</p>
-              <p>haidy.sobhy@gmail.com</p>
+              <p>ahmedeid@gmail.com</p>
               <p>+2012345678</p>
             </address>
           </div>
