@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import ProductCard from '../components/ProductCard';
+import ProductCard from '../components/product/ProductCard';
 
 const ProductListingPage = () => {
   const [searchParams] = useSearchParams();
@@ -11,16 +11,6 @@ const ProductListingPage = () => {
   const [priceRange, setPriceRange] = useState({ min: 0, max: 2000 });
   const [sortBy, setSortBy] = useState('default');
   const [searchQuery, setSearchQuery] = useState('');
-
-  useEffect(() => {
-    const categoryParam = searchParams.get('category');
-    const searchParam = searchParams.get('search');
-    
-    if (categoryParam) setSelectedCategory(categoryParam);
-    if (searchParam) setSearchQuery(searchParam);
-    
-    fetchProducts();
-  }, [searchParams]);
 
   const fetchProducts = async () => {
     const mockProducts = [
@@ -43,6 +33,16 @@ const ProductListingPage = () => {
     const uniqueCategories = [...new Set(mockProducts.map(p => p.category))];
     setCategories(uniqueCategories);
   };
+
+  useEffect(() => {
+    const categoryParam = searchParams.get('category');
+    const searchParam = searchParams.get('search');
+    
+    if (categoryParam) setSelectedCategory(categoryParam);
+    if (searchParam) setSearchQuery(searchParam);
+    
+    fetchProducts();
+  }, [searchParams]);
 
   useEffect(() => {
     let filtered = [...products];

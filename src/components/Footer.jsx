@@ -69,7 +69,7 @@ const Footer = () => {
                 <div className="font-bold">App Store</div>
               </div>
             </div>
-            <div className="flex space-x-4 mt-4 text-gray-400">
+            <div className="flex space-x-6 mt-5 text-gray-400">
               <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="hover:text-white"><FaFacebook/></a>
               <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="hover:text-white"><FaInstagram/></a>
               <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="hover:text-white"><FaTwitter/></a>
