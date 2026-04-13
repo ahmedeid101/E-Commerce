@@ -51,7 +51,7 @@ const FlashSaleProductCard = ({ product, onAddToCart, onWishlistToggle, isInWish
       </button>
 
       {/* Product Image */}
-      <Link to={`/product-details`}>
+      <Link to={`/product/${product.id}`}>
         <div className="relative bg-gray-100 h-56 overflow-hidden">
           <img
             src={product.image}
@@ -63,7 +63,7 @@ const FlashSaleProductCard = ({ product, onAddToCart, onWishlistToggle, isInWish
           {/* Quick View Overlay */}
           <div className={`absolute inset-0 bg-black/60 flex items-center justify-center transition-opacity duration-300 ${isHovered ? 'opacity-100' : 'opacity-0'}`}>
             <Link 
-              to={`/product-details`}
+              to={`/product/${product.id}`}
               className="bg-white text-black px-4 py-2 rounded-full flex items-center gap-2 hover:bg-gray-100 transition-colors"
               onClick={(e) => e.stopPropagation()}
             >

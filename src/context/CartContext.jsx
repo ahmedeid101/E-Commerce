@@ -1,4 +1,4 @@
-import React, { createContext, useState, useContext, useEffect } from 'react';
+import React, { createContext, useState, useContext, useEffect, useMemo } from 'react';
 
 const CartContext = createContext();
 
@@ -6,9 +6,8 @@ export const useCart = () => useContext(CartContext);
 
 export const CartProvider = ({ children }) => {
   const [cartItems, setCartItems] = useState([]);
-  const [cartCount, setCartCount] = useState(0);
-  const [cartTotal, setCartTotal] = useState(0);
 
+  // Load cart from localStorage on mount
   useEffect(() => {
     const savedCart = localStorage.getItem('cart');
     if (savedCart) {
@@ -16,12 +15,16 @@ export const CartProvider = ({ children }) => {
     }
   }, []);
 
+  // Persist cart to localStorage whenever items change
   useEffect(() => {
     localStorage.setItem('cart', JSON.stringify(cartItems));
+  }, [cartItems]);
+
+  // Memoize cart calculations
+  const { cartCount, cartTotal } = useMemo(() => {
     const count = cartItems.reduce((sum, item) => sum + item.quantity, 0);
     const total = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-    setCartCount(count);
-    setCartTotal(total);
+    return { cartCount: count, cartTotal: total };
   }, [cartItems]);
 
   const addToCart = (product, quantity = 1) => {
@@ -58,16 +61,19 @@ export const CartProvider = ({ children }) => {
     setCartItems([]);
   };
 
+  // Memoize context value to prevent unnecessary re-renders in consumers
+  const value = useMemo(() => ({
+    cartItems,
+    cartCount,
+    cartTotal,
+    addToCart,
+    removeFromCart,
+    updateQuantity,
+    clearCart
+  }), [cartItems, cartCount, cartTotal]);
+
   return (
-    <CartContext.Provider value={{
-      cartItems,
-      cartCount,
-      cartTotal,
-      addToCart,
-      removeFromCart,
-      updateQuantity,
-      clearCart
-    }}>
+    <CartContext.Provider value={value}>
       {children}
     </CartContext.Provider>
   );

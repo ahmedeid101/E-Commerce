@@ -48,6 +48,62 @@ const productBrands = {
   7: 'AquaCool',
 };
 
+// Product-specific images
+const productImages = {
+  1: [
+    `/images/products/iPhone/m1.webp`,
+    `/images/products/iPhone/m2.webp`,
+    `/images/products/iPhone/m3.webp`,
+    `/images/products/iPhone/m4.jpg`,
+  ],
+  2: [
+    `/images/products/special-offers/o3.jpg`,
+    `/images/products/special-offers/o5.jpg`,
+    `/images/products/special-offers/o21.jpg`,
+    `/images/products/special-offers/o26.jpg`,
+  ],
+  3: [
+    `/images/products/b8.jpg`,
+    `/images/products/b9.jpg`,
+    `/images/products/iPhone/m1.webp`,
+    `/images/products/iPhone/m2.webp`,
+  ],
+  4: [
+    `/images/products/laptops/l1.jpg`,
+    `/images/products/laptops/l2.jpg`,
+    `/images/products/laptops/l3.jpg`,
+    `/images/products/laptops/l4.jpg`,
+  ],
+  5: [
+    `/images/products/shoes/s1.png`,
+    `/images/products/shoes/s2.jpg`,
+    `/images/products/shoes/s3.jpg`,
+    `/images/products/shoes/s4.jpg`,
+  ],
+  6: [
+    `/images/products/mobiles/m1.jpg`,
+    `/images/products/mobiles/m2.jpg`,
+    `/images/products/mobiles/m3.jpg`,
+    `/images/products/mobiles/m4.jpg`,
+  ],
+  7: [
+    `/images/products/laptops/l5.jpg`,
+    `/images/products/laptops/l6.jpg`,
+    `/images/products/laptops/l7.jpg`,
+    `/images/products/laptops/l8.jpg`,
+  ],
+};
+
+// Helper function to get images for a product
+const getProductImages = (id) => {
+  return productImages[id] || [
+    `https://picsum.photos/id/${id}/400/400`,
+    `https://picsum.photos/id/${id + 100}/400/400`,
+    `https://picsum.photos/id/${id + 200}/400/400`,
+    `https://picsum.photos/id/${id + 300}/400/400`,
+  ];
+};
+
 export const getMockProductById = (idValue) => {
   const id = Number(idValue) || 1;
   const name = productNames[id] || productNames[1];
@@ -81,12 +137,7 @@ export const getMockProductById = (idValue) => {
       Dimensions: '15 x 10 x 2 cm',
       Warranty: '1 Year',
     },
-    images: [
-      `images/Read_HAVIT_HV-G92_Gamepad.png`,
-      `images/Red_HAVIT_HV-G92_Gamepad-1.png`,
-      `images/Red_HAVIT_HV-G92_Gamepad-2.png`,
-      `images/Red_HAVIT_HV-G92_Gamepad-3.png`,
-    ],
+    images: getProductImages(id),
     reviews_list: [
       { id: 1, user: 'John D.', rating: 5, date: '2024-01-15', comment: 'Excellent product! Very satisfied with the quality.', helpful: 24 },
       { id: 2, user: 'Sarah M.', rating: 4, date: '2024-01-10', comment: 'Good quality, but a bit pricey.', helpful: 12 },

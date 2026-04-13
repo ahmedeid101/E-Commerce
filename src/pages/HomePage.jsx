@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { useCart } from '../context/CartContext';
 import { useWishlist } from '../context/WishlistContext';
+import { useProductActions } from '../hooks/useProductActions';
 import HeroSlider from '../components/home/HeroSlider';
 import FlashSales from '../components/home/FlashSales';
 import CategoryList from '../components/home/CategoryList';
@@ -10,38 +10,19 @@ import FeaturedSection from '../components/home/FeaturedSection';
 import { fetchMockData } from '../utils/mockData';
 
 const HomePage = () => {
-  const { addToCart } = useCart();
-  const { addToWishlist, removeFromWishlist, isInWishlist } = useWishlist();
+  const { isInWishlist } = useWishlist();
+  const { handleAddToCart, handleWishlistToggle } = useProductActions();
   
-  const [, setProducts] = useState([]);
   const [flashProducts, setFlashProducts] = useState([]);
   const [bestSelling, setBestSelling] = useState([]);
   const [newArrival, setNewArrival] = useState([]);
 
   useEffect(() => {
     const data = fetchMockData();
-    setProducts(data.products);
     setFlashProducts(data.flashProducts);
     setBestSelling(data.bestSelling);
     setNewArrival(data.newArrival);
   }, []);
-
-  const handleAddToCart = async (product, e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    addToCart(product);
-  };
-
-  const handleWishlistToggle = (product, e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    
-    if (isInWishlist(product.id)) {
-      removeFromWishlist(product.id);
-    } else {
-      addToWishlist(product);
-    }
-  };
 
   return (
     <div>
@@ -74,28 +55,27 @@ const HomePage = () => {
       />
       <FeaturedSection />
       
-      {/* Features Section */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
-          <div>
-            <div className="text-4xl mb-3">🚚</div>
-            <h4 className="font-bold mb-2">FREE AND FAST DELIVERY</h4>
-            <p className="text-gray-500 text-sm">Free delivery for all orders over $140</p>
-          </div>
-          <div>
-            <div className="text-4xl mb-3">🎧</div>
-            <h4 className="font-bold mb-2">24/7 CUSTOMER SERVICE</h4>
-            <p className="text-gray-500 text-sm">Friendly 24/7 customer support</p>
-          </div>
-          <div>
-            <div className="text-4xl mb-3">✅</div>
-            <h4 className="font-bold mb-2">MONEY BACK GUARANTEE</h4>
-            <p className="text-gray-500 text-sm">We return money within 30 days</p>
-          </div>
-        </div>
-      </div>
+      <FeaturesHighlight />
     </div>
   );
 };
+
+const FeaturesHighlight = () => (
+  <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+      <FeatureItem icon="🚚" title="FREE AND FAST DELIVERY" description="Free delivery for all orders over $140" />
+      <FeatureItem icon="🎧" title="24/7 CUSTOMER SERVICE" description="Friendly 24/7 customer support" />
+      <FeatureItem icon="✅" title="MONEY BACK GUARANTEE" description="We return money within 30 days" />
+    </div>
+  </div>
+);
+
+const FeatureItem = ({ icon, title, description }) => (
+  <div>
+    <div className="text-4xl mb-3">{icon}</div>
+    <h4 className="font-bold mb-2">{title}</h4>
+    <p className="text-gray-500 text-sm">{description}</p>
+  </div>
+);
 
 export default HomePage;

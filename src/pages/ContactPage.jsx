@@ -110,8 +110,6 @@ const ContactPage = () => {
 
     await new Promise((res) => setTimeout(res, 1500));
 
-    console.log('Submitted:', formData);
-
     setLoading(false);
     setSuccess(true);
     setFormData(INITIAL_FORM);
