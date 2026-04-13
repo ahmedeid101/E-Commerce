@@ -1,4 +1,3 @@
-// components/navbar/AccountDropdown.jsx
 import React, { useState, useRef, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { FaUser, FaCog, FaClipboardList, FaBan, FaStar, FaSignOutAlt, FaSignInAlt, FaUserPlus } from 'react-icons/fa';

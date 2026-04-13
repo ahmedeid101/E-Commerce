@@ -4,46 +4,43 @@ import React, {
   useContext,
   useEffect,
   useMemo,
+  useCallback,
 } from "react";
 
 const WishlistContext = createContext();
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const useWishlist = () => useContext(WishlistContext);
 
 export const WishlistProvider = ({ children }) => {
-  const [wishlistItems, setWishlistItems] = useState([]);
-
-  // Load wishlist from localStorage on mount
-  useEffect(() => {
+  const [wishlistItems, setWishlistItems] = useState(() => {
     const savedWishlist = localStorage.getItem("wishlist");
-    if (savedWishlist) {
-      setWishlistItems(JSON.parse(savedWishlist));
-    }
-  }, []);
+    return savedWishlist ? JSON.parse(savedWishlist) : [];
+  });
 
   // Persist wishlist to localStorage whenever items change
   useEffect(() => {
     localStorage.setItem("wishlist", JSON.stringify(wishlistItems));
   }, [wishlistItems]);
 
-  const addToWishlist = (product) => {
+  const addToWishlist = useCallback((product) => {
     setWishlistItems((prevItems) => {
       if (prevItems.find((item) => item.id === product.id)) {
         return prevItems;
       }
       return [...prevItems, product];
     });
-  };
+  }, []);
 
-  const removeFromWishlist = (productId) => {
+  const removeFromWishlist = useCallback((productId) => {
     setWishlistItems((prevItems) =>
       prevItems.filter((item) => item.id !== productId),
     );
-  };
+  }, []);
 
-  const isInWishlist = (productId) => {
+  const isInWishlist = useCallback((productId) => {
     return wishlistItems.some((item) => item.id === productId);
-  };
+  }, [wishlistItems]);
 
   // Memoize context value to prevent unnecessary re-renders in consumers
   const value = useMemo(
@@ -54,7 +51,7 @@ export const WishlistProvider = ({ children }) => {
       removeFromWishlist,
       isInWishlist,
     }),
-    [wishlistItems],
+    [wishlistItems, addToWishlist, removeFromWishlist, isInWishlist],
   );
 
   return (

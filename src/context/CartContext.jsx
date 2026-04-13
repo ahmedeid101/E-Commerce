@@ -1,19 +1,15 @@
-import React, { createContext, useState, useContext, useEffect, useMemo } from 'react';
+import React, { createContext, useState, useContext, useEffect, useMemo, useCallback } from 'react';
 
 const CartContext = createContext();
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const useCart = () => useContext(CartContext);
 
 export const CartProvider = ({ children }) => {
-  const [cartItems, setCartItems] = useState([]);
-
-  // Load cart from localStorage on mount
-  useEffect(() => {
+  const [cartItems, setCartItems] = useState(() => {
     const savedCart = localStorage.getItem('cart');
-    if (savedCart) {
-      setCartItems(JSON.parse(savedCart));
-    }
-  }, []);
+    return savedCart ? JSON.parse(savedCart) : [];
+  });
 
   // Persist cart to localStorage whenever items change
   useEffect(() => {
@@ -27,7 +23,7 @@ export const CartProvider = ({ children }) => {
     return { cartCount: count, cartTotal: total };
   }, [cartItems]);
 
-  const addToCart = (product, quantity = 1) => {
+  const addToCart = useCallback((product, quantity = 1) => {
     setCartItems(prevItems => {
       const existingItem = prevItems.find(item => item.id === product.id);
       if (existingItem) {
@@ -39,13 +35,13 @@ export const CartProvider = ({ children }) => {
       }
       return [...prevItems, { ...product, quantity }];
     });
-  };
+  }, []);
 
-  const removeFromCart = (productId) => {
+  const removeFromCart = useCallback((productId) => {
     setCartItems(prevItems => prevItems.filter(item => item.id !== productId));
-  };
+  }, []);
 
-  const updateQuantity = (productId, quantity) => {
+  const updateQuantity = useCallback((productId, quantity) => {
     if (quantity <= 0) {
       removeFromCart(productId);
       return;
@@ -55,11 +51,11 @@ export const CartProvider = ({ children }) => {
         item.id === productId ? { ...item, quantity } : item
       )
     );
-  };
+  }, [removeFromCart]);
 
-  const clearCart = () => {
+  const clearCart = useCallback(() => {
     setCartItems([]);
-  };
+  }, []);
 
   // Memoize context value to prevent unnecessary re-renders in consumers
   const value = useMemo(() => ({
@@ -70,7 +66,7 @@ export const CartProvider = ({ children }) => {
     removeFromCart,
     updateQuantity,
     clearCart
-  }), [cartItems, cartCount, cartTotal]);
+  }), [cartItems, cartCount, cartTotal, addToCart, removeFromCart, updateQuantity, clearCart]);
 
   return (
     <CartContext.Provider value={value}>

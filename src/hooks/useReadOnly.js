@@ -1,4 +1,3 @@
-// hooks/useReadOnly.js
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 

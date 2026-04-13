@@ -1,4 +1,3 @@
-// components/navbar/NavbarContent.jsx
 import React from 'react';
 import { FaShoppingCart, FaHeart } from 'react-icons/fa';
 import { Link } from 'react-router-dom';

@@ -1,6 +1,5 @@
 import React from 'react';
 import { FaTruck, FaUndo, FaHeart, FaRegHeart, FaShoppingCart } from 'react-icons/fa';
-import Button from '../../components/Button';
 import RatingStars from './RatingStars';
 
 const ProductInfo = ({
