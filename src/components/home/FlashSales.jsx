@@ -76,7 +76,7 @@ const FlashSaleProductCard = ({ product, onAddToCart, onWishlistToggle, isInWish
       {/* Product Info */}
       <div className="p-4">
         <Link to={`/product/${product.id}`}>
-          <h3 className="font-semibold text-gray-800 hover:text-red-500 transition-colors mb-2 line-clamp-2 min-h-[48px]">
+          <h3 className="font-semibold text-gray-800 hover:text-red-500 transition-colors mb-2 line-clamp-2 min-h-12">
             {product.name}
           </h3>
         </Link>
@@ -223,7 +223,7 @@ const FlashSales = ({ products, onAddToCart, onWishlistToggle, isInWishlist }) =
           style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
         >
           {products.map((product) => (
-            <div key={product.id} className="flex-shrink-0 w-full sm:w-[280px] md:w-[300px]">
+            <div key={product.id} className="shrink-0 w-full sm:w-70 md:w-75">
               <FlashSaleProductCard 
                 product={product}
                 onAddToCart={handleAddToCart}

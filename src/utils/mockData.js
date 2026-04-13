@@ -95,14 +95,14 @@ export const fetchMockData = () => {
   ];
 
   const mockProducts = [
-    { id: 1, name: 'HAVIT HV-G92 Gamepad', price: 120, originalPrice: 160, rating: 4.5, reviews: 88, category: 'Electronics', discount: 30, image: 'https://picsum.photos/id/8/300/300' },
-    { id: 2, name: 'AK-900 Wired Keyboard', price: 960, originalPrice: 1160, rating: 4.8, reviews: 75, category: 'Electronics', discount: 35, image: 'https://picsum.photos/id/7/300/300' },
-    { id: 3, name: 'IPS LCD Gaming Monitor', price: 370, originalPrice: 400, rating: 4.6, reviews: 99, category: 'Electronics', discount: 7.5, image: 'https://picsum.photos/id/6/300/300' },
-    { id: 4, name: 'S-Series Comfort Chair', price: 375, originalPrice: 400, rating: 4.7, reviews: 99, category: 'Furniture', discount: 6.25, image: 'images/Small BookSelf.png' },
-    { id: 5, name: 'The North Coat', price: 260, originalPrice: 360, rating: 4.5, reviews: 85, category: 'Fashion', discount: 28, image: 'images/The north coat.png' },
-    { id: 6, name: 'Gucci Duffle Bag', price: 960, originalPrice: 1160, rating: 4.6, reviews: 86, category: 'Fashion', discount: 17, image: 'images/Gucci duffle bag.png' },
-    { id: 7, name: 'RGB Liquid CPU Cooler', price: 160, originalPrice: 170, rating: 4.5, reviews: 85, category: 'Electronics', discount: 6, image: 'images/RGB liquid CPU Cooler.png' },
-    { id: 8, name: 'Small BookSelf', price: 360, originalPrice: 360, rating: 4.5, reviews: 85, category: 'Furniture', discount: 0, image: 'images/Small BookSelf.png' },
+    { id: 1, name: 'Breed Dry Food Dog', price: 120, originalPrice: 160, rating: 4.5, reviews: 88, category: 'Electronics', discount: 30, image: 'images/Breed Dry Food Dog.jpg' },
+    { id: 2, name: 'Canon Eos Dslr Camera', price: 960, originalPrice: 1160, rating: 4.8, reviews: 75, category: 'Electronics', discount: 35, image: 'images/Canon Eos Dslr Camera.png' },
+    { id: 3, name: 'Asus Fhd Gaming Labtop', price: 370, originalPrice: 400, rating: 4.6, reviews: 99, category: 'Electronics', discount: 7.5, image: 'images/Asus Fhd Gaming Labtop.png' },
+    { id: 4, name: 'Curology Product Set', price: 375, originalPrice: 400, rating: 4.7, reviews: 99, category: 'Furniture', discount: 6.25, image: 'images/Curology Product Set.png' },
+    { id: 5, name: 'Kids Electric Car', price: 260, originalPrice: 360, rating: 4.5, reviews: 85, category: 'Fashion', discount: 28, image: 'images/Kids Electric Car.png' },
+    { id: 6, name: 'Jr.Zoom Soccer Cleats.', price: 960, originalPrice: 1160, rating: 4.6, reviews: 86, category: 'Fashion', discount: 17, image: 'images/Jr.Zoom Soccer Cleats.png' },
+    { id: 7, name: 'GP11 Shotter USP Gamepad', price: 160, originalPrice: 170, rating: 4.5, reviews: 85, category: 'Electronics', discount: 6, image: 'images/GP11 Shotter USP Gamepad.png' },
+    { id: 8, name: 'Quilted Stain Jacket', price: 360, originalPrice: 360, rating: 4.5, reviews: 85, category: 'Furniture', discount: 0, image: 'images/Quilted Stain Jacket.png' },
   ];
 
   return {

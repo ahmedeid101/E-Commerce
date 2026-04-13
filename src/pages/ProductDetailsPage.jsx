@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 import { useWishlist } from '../context/WishlistContext';
@@ -16,7 +16,6 @@ import {
   ProductTabs,
   RelatedProducts,
   SizeGuideModal,
-  LoadingState,
   NotFoundState,
 } from '../components/productDetails';
 
@@ -26,33 +25,15 @@ const ProductDetailsPage = () => {
   const { addToCart } = useCart();
   const { addToWishlist, removeFromWishlist, isInWishlist } = useWishlist();
 
-  const [product, setProduct] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const product = getMockProductById(id);
   const [selectedColor, setSelectedColor] = useState(colors[0].name);
   const [selectedSize, setSelectedSize] = useState(sizes[2]);
   const [quantity, setQuantity] = useState(1);
   const [activeTab, setActiveTab] = useState('description');
-  const [relatedProducts, setRelatedProducts] = useState([]);
   const [addingToCart, setAddingToCart] = useState(false);
   const [showSizeGuide, setShowSizeGuide] = useState(false);
   const [selectedImage, setSelectedImage] = useState(0);
-
-  useEffect(() => {
-    fetchProductDetails();
-  }, [id]);
-
-  const fetchProductDetails = async () => {
-    setLoading(true);
-    await new Promise((resolve) => setTimeout(resolve, 800));
-
-    const mockProduct = getMockProductById(id);
-    setProduct(mockProduct);
-    setSelectedColor(colors[0].name);
-    setSelectedSize(sizes[2]);
-    setSelectedImage(0);
-    setRelatedProducts(getRelatedProducts());
-    setLoading(false);
-  };
+  const relatedProducts = getRelatedProducts();
 
   const handleQuantityChange = (type) => {
     setQuantity((current) => Math.max(1, type === 'increase' ? current + 1 : current - 1));
@@ -87,10 +68,6 @@ const ProductDetailsPage = () => {
       showToast(`${product.name} added to wishlist`, 'success');
     }
   };
-
-  if (loading) {
-    return <LoadingState />;
-  }
 
   if (!product) {
     return <NotFoundState />;

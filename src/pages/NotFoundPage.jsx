@@ -32,8 +32,7 @@ const NotFoundPage = () => {
     "Don't panic! The page is just taking a coffee break.",
     "This page is as real as unicorns."
   ];
-
-  const randomErrorMessage = errorMessages[Math.floor(Math.random() * errorMessages.length)];
+  const randomErrorMessage = errorMessages[0];
 
   return (
     <div className="min-h-[calc(100vh-400px)] flex items-center justify-center px-4 py-16">
@@ -130,7 +129,7 @@ const NotFoundPage = () => {
         </div>
 
         {/* Fun Facts Section */}
-        <div className="mt-12 p-6 bg-gradient-to-r from-red-50 to-orange-50 rounded-2xl">
+        <div className="mt-12 p-6 bg-linear-to-r from-red-50 to-orange-50 rounded-2xl">
           <div className="flex items-center justify-center space-x-2 mb-3">
             <span className="text-2xl">💡</span>
             <span className="text-sm font-semibold text-gray-600">DID YOU KNOW?</span>

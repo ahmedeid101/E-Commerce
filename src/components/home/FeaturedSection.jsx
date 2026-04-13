@@ -8,7 +8,7 @@ const FeaturedCard = ({ image, title, description, link }) => (
       alt={title} 
       className="w-full h-full object-cover opacity-80 group-hover:scale-105 transition-transform duration-500"
     />
-    <div className="absolute bottom-0 left-0 right-0 p-8 bg-gradient-to-t from-black via-black/50 to-transparent">
+    <div className="absolute bottom-0 left-0 right-0 p-8 bg-linear-to-t from-black via-black/50 to-transparent">
       <h3 className="text-2xl font-bold text-white mb-2">{title}</h3>
       <p className="text-gray-300 mb-4">{description}</p>
       <Link to={link}>

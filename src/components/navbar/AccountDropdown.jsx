@@ -1,12 +1,14 @@
 // components/navbar/AccountDropdown.jsx
 import React, { useState, useRef, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { FaUser, FaCog, FaClipboardList, FaBan, FaStar, FaSignOutAlt } from 'react-icons/fa';
+import { FaUser, FaCog, FaClipboardList, FaBan, FaStar, FaSignOutAlt, FaSignInAlt, FaUserPlus } from 'react-icons/fa';
 
 const AccountDropdown = () => {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef(null);
   const navigate = useNavigate();
+  const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+  const currentUser = JSON.parse(localStorage.getItem('currentUser') || 'null');
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -26,7 +28,8 @@ const AccountDropdown = () => {
     setIsOpen(false);
   };
 
-  const menuItems = [
+  // Menu items for logged in users
+  const loggedInMenuItems = [
     { 
       to: '/account', 
       icon: <FaUser className="w-4 h-4" />, 
@@ -53,6 +56,24 @@ const AccountDropdown = () => {
     }
   ];
 
+  // Menu items for guests
+  const guestMenuItems = [
+    { 
+      to: '/login', 
+      icon: <FaSignInAlt className="w-4 h-4" />, 
+      label: 'Login',
+      description: 'Sign in to your account'
+    },
+    { 
+      to: '/register', 
+      icon: <FaUserPlus className="w-4 h-4" />, 
+      label: 'Register',
+      description: 'Create a new account'
+    }
+  ];
+
+  const menuItems = isLoggedIn ? loggedInMenuItems : guestMenuItems;
+
   return (
     <div className="relative" ref={dropdownRef}>
       {/* Account Icon Button */}
@@ -69,9 +90,13 @@ const AccountDropdown = () => {
       {isOpen && (
         <div className="absolute right-0 mt-3 w-72 bg-white rounded-lg shadow-xl border border-gray-100 z-50 overflow-hidden animate-slide-down">
           {/* Header */}
-          <div className="bg-gradient-to-r from-red-500 to-red-600 px-4 py-3">
-            <h3 className="text-white font-semibold">My Account</h3>
-            <p className="text-white/80 text-xs">Manage your account settings</p>
+          <div className="bg-linear-to-r from-red-500 to-red-600 px-4 py-3">
+            <h3 className="text-white font-semibold">
+              {isLoggedIn ? `Hello, ${currentUser?.name?.split(' ')[0] || 'User'}!` : 'Welcome to Exclusive'}
+            </h3>
+            <p className="text-white/80 text-xs">
+              {isLoggedIn ? 'Manage your account settings' : 'Please login or register'}
+            </p>
           </div>
 
           {/* Menu Items */}
@@ -96,24 +121,26 @@ const AccountDropdown = () => {
             ))}
           </div>
 
-          {/* Divider */}
-          <div className="border-t border-gray-100"></div>
-
-          {/* Logout Button */}
-          <button
-            onClick={handleLogout}
-            className="w-full flex items-center gap-3 px-4 py-3 hover:bg-red-50 transition-colors group"
-          >
-            <div className="text-gray-400 group-hover:text-red-500 transition-colors">
-              <FaSignOutAlt className="w-4 h-4" />
-            </div>
-            <div className="flex-1 text-left">
-              <div className="font-medium text-gray-800 group-hover:text-red-500 transition-colors">
-                Logout
-              </div>
-              <div className="text-xs text-gray-400">Sign out of your account</div>
-            </div>
-          </button>
+          {/* Logout Button - Only for logged in users */}
+          {isLoggedIn && (
+            <>
+              <div className="border-t border-gray-100"></div>
+              <button
+                onClick={handleLogout}
+                className="w-full flex items-center gap-3 px-4 py-3 hover:bg-red-50 transition-colors group"
+              >
+                <div className="text-gray-400 group-hover:text-red-500 transition-colors">
+                  <FaSignOutAlt className="w-4 h-4" />
+                </div>
+                <div className="flex-1 text-left">
+                  <div className="font-medium text-gray-800 group-hover:text-red-500 transition-colors">
+                    Logout
+                  </div>
+                  <div className="text-xs text-gray-400">Sign out of your account</div>
+                </div>
+              </button>
+            </>
+          )}
         </div>
       )}
     </div>

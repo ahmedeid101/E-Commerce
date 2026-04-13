@@ -22,7 +22,7 @@ const RecommendedProductCard = ({ product, isLoading, onAddToCart }) => {
       {/* Product Info */}
       <div className="p-4">
         <Link to={`/product/${id}`}>
-          <h3 className="font-semibold text-gray-800 hover:text-red-500 transition-colors mb-2 line-clamp-2 min-h-[48px]">
+          <h3 className="font-semibold text-gray-800 hover:text-red-500 transition-colors mb-2 line-clamp-2 min-h-12">
             {name}
           </h3>
         </Link>

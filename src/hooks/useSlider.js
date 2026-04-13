@@ -6,6 +6,11 @@ export const useSlider = (items, itemsPerView = 4) => {
   const [scrollPosition, setScrollPosition] = useState(0);
   const sliderRef = useRef(null);
 
+  const getScrollAmount = () => {
+    if (!sliderRef.current) return 0;
+    return sliderRef.current.clientWidth / itemsPerView;
+  };
+
   const checkScrollPosition = () => {
     if (sliderRef.current) {
       const { scrollLeft, scrollWidth, clientWidth } = sliderRef.current;
@@ -17,14 +22,14 @@ export const useSlider = (items, itemsPerView = 4) => {
 
   const scrollLeft = () => {
     if (sliderRef.current) {
-      const scrollAmount = sliderRef.current.clientWidth;
+      const scrollAmount = getScrollAmount();
       sliderRef.current.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
     }
   };
 
   const scrollRight = () => {
     if (sliderRef.current) {
-      const scrollAmount = sliderRef.current.clientWidth;
+      const scrollAmount = getScrollAmount();
       sliderRef.current.scrollBy({ left: scrollAmount, behavior: 'smooth' });
     }
   };

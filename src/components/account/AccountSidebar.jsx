@@ -1,3 +1,4 @@
+// components/account/AccountSidebar.jsx
 import { Link } from 'react-router-dom';
 import Button from '../../components/Button';
 
@@ -11,16 +12,25 @@ const tabs = [
 ];
 
 const AccountSidebar = ({ activeTab, onTabChange, profileData, wishlistCount, cartCount }) => {
+  // Get user initials for avatar
+  const getInitials = () => {
+    const firstInitial = profileData.firstName ? profileData.firstName[0] : '';
+    const lastInitial = profileData.lastName ? profileData.lastName[0] : '';
+    return (firstInitial + lastInitial).toUpperCase() || 'U';
+  };
+
   return (
     <div className="lg:w-1/4">
       <div className="bg-white rounded-lg shadow-sm border border-gray-200 sticky top-24">
         <div className="p-6 border-b border-gray-200">
           <div className="flex items-center space-x-3">
             <div className="w-12 h-12 bg-red-500 rounded-full flex items-center justify-center text-white text-xl font-bold">
-              {profileData.firstName[0]}{profileData.lastName[0]}
+              {getInitials()}
             </div>
             <div>
-              <h3 className="font-semibold">{profileData.firstName} {profileData.lastName}</h3>
+              <h3 className="font-semibold">
+                {profileData.firstName} {profileData.lastName}
+              </h3>
               <p className="text-sm text-gray-500">{profileData.email}</p>
             </div>
           </div>
@@ -44,15 +54,15 @@ const AccountSidebar = ({ activeTab, onTabChange, profileData, wishlistCount, ca
           ))}
 
           <Link to="/wishlist">
-            <Button variant="outline" className="w-full justify-start text-left">
+            <button className="w-full text-left px-4 py-3 rounded-lg transition-colors text-gray-700 hover:bg-gray-100">
               ❤️ My Wishlist ({wishlistCount})
-            </Button>
+            </button>
           </Link>
 
           <Link to="/cart">
-            <Button variant="outline" className="w-full justify-start text-left">
+            <button className="w-full text-left px-4 py-3 rounded-lg transition-colors text-gray-700 hover:bg-gray-100">
               🛒 My Cart ({cartCount})
-            </Button>
+            </button>
           </Link>
         </nav>
       </div>
@@ -61,3 +71,4 @@ const AccountSidebar = ({ activeTab, onTabChange, profileData, wishlistCount, ca
 };
 
 export default AccountSidebar;
+

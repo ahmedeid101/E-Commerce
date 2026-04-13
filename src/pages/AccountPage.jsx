@@ -1,143 +1,313 @@
-﻿import React, { useState } from 'react';
+﻿import React, { useState, useRef } from 'react';
+import { Link } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 import { useWishlist } from '../context/WishlistContext';
-import { showToast } from '../utils/toast';
-import { initialProfileData, initialNewAddress, getOrderStatusColor } from '../utils/accountHelpers';
-import {
-  AccountSidebar,
-  StatsGrid,
-  ProfileSection,
-  AddressBookSection,
-  PaymentMethodsSection,
-  OrdersSection,
+import { 
+  AccountSidebar, 
+  StatsGrid, 
+  ProfileSection, 
+  AddressBookSection, 
+  PaymentMethodsSection, 
+  OrdersSection 
 } from '../components/account';
 
 const AccountPage = () => {
   const { cartCount } = useCart();
   const { wishlistCount } = useWishlist();
-
   const [activeTab, setActiveTab] = useState('profile');
   const [isEditing, setIsEditing] = useState(false);
-  const [orders, setOrders] = useState(() => {
-    const savedOrders = JSON.parse(localStorage.getItem('orders') || '[]');
-    return savedOrders.reverse();
+  
+  // Address form state
+  const [newAddress, setNewAddress] = useState({
+    type: 'Home',
+    street: '',
+    city: '',
+    state: '',
+    zipCode: '',
+    country: 'USA'
   });
-  const [profileData, setProfileData] = useState(initialProfileData);
-  const [addresses, setAddresses] = useState([
-    {
-      id: 1,
-      type: 'Home',
-      street: '123 Main Street',
-      city: 'New York',
-      state: 'NY',
-      zipCode: '10001',
-      country: 'USA',
-      isDefault: true,
-    },
-    {
-      id: 2,
-      type: 'Work',
-      street: '456 Business Ave',
-      city: 'Brooklyn',
-      state: 'NY',
-      zipCode: '11201',
-      country: 'USA',
-      isDefault: false,
-    },
-  ]);
-  const [newAddress, setNewAddress] = useState(initialNewAddress);
   const [showAddressForm, setShowAddressForm] = useState(false);
-  const [paymentMethods, setPaymentMethods] = useState([
-    {
-      id: 1,
-      type: 'Visa',
-      last4: '4242',
-      expiry: '12/25',
-      isDefault: true,
-    },
-    {
-      id: 2,
-      type: 'Mastercard',
-      last4: '5555',
-      expiry: '08/24',
-      isDefault: false,
-    },
-  ]);
+
+  // Payment methods - Load from localStorage
+  const idCounter = useRef(0);
+
+  const getInitialCurrentUser = () => {
+    try {
+      return JSON.parse(localStorage.getItem('currentUser'));
+    } catch {
+      return null;
+    }
+  };
+
+  const getInitialProfileData = (user) => {
+    if (!user) {
+      return {
+        firstName: '',
+        lastName: '',
+        email: '',
+        phone: '',
+        dateOfBirth: '',
+        gender: '',
+        bio: ''
+      };
+    }
+
+    try {
+      const savedProfile = JSON.parse(localStorage.getItem(`userProfile_${user.id}`));
+      if (savedProfile) {
+        return savedProfile;
+      }
+    } catch {
+      // ignore parse errors and fallback to defaults
+    }
+
+    const nameParts = user.name ? user.name.split(' ') : ['', ''];
+    return {
+      firstName: nameParts[0] || '',
+      lastName: nameParts.slice(1).join(' ') || '',
+      email: user.email || '',
+      phone: user.phone || '',
+      dateOfBirth: user.dateOfBirth || '',
+      gender: user.gender || '',
+      bio: user.bio || ''
+    };
+  };
+
+  const getInitialAddresses = (user) => {
+    if (!user) {
+      return [];
+    }
+
+    try {
+      const savedAddresses = JSON.parse(localStorage.getItem(`userAddresses_${user.id}`));
+      if (savedAddresses && savedAddresses.length > 0) {
+        return savedAddresses;
+      }
+    } catch {
+      // ignore parse errors and fallback to defaults
+    }
+
+    const defaultAddresses = [
+      {
+        id: `addr_${Math.random().toString(36).substr(2, 9)}`,
+        type: 'Home',
+        street: '',
+        city: '',
+        state: '',
+        zipCode: '',
+        country: 'USA',
+        isDefault: true
+      }
+    ];
+    localStorage.setItem(`userAddresses_${user.id}`, JSON.stringify(defaultAddresses));
+    return defaultAddresses;
+  };
+
+  const getInitialPaymentMethods = (user) => {
+    if (!user) {
+      return [];
+    }
+
+    try {
+      const savedPayments = JSON.parse(localStorage.getItem(`userPayments_${user.id}`));
+      if (savedPayments && savedPayments.length > 0) {
+        return savedPayments;
+      }
+    } catch {
+      // ignore parse errors and fallback to defaults
+    }
+
+    const defaultPayments = [
+      {
+        id: `pm_${Math.random().toString(36).substr(2, 9)}`,
+        type: 'Visa',
+        last4: '4242',
+        expiry: '12/25',
+        isDefault: true
+      }
+    ];
+    localStorage.setItem(`userPayments_${user.id}`, JSON.stringify(defaultPayments));
+    return defaultPayments;
+  };
+
+  const getInitialOrders = (user) => {
+    if (!user) {
+      return [];
+    }
+
+    try {
+      const savedOrders = JSON.parse(localStorage.getItem('orders') || '[]');
+      return savedOrders.filter(order => order.customer?.email === user.email).reverse();
+    } catch {
+      return [];
+    }
+  };
+
+  const initialUser = getInitialCurrentUser();
+  const [currentUser] = useState(initialUser);
+  const [profileData, setProfileData] = useState(() => getInitialProfileData(initialUser));
+  const [addresses, setAddresses] = useState(() => getInitialAddresses(initialUser));
+  const [paymentMethods, setPaymentMethods] = useState(() => getInitialPaymentMethods(initialUser));
+  const [orders] = useState(() => getInitialOrders(initialUser));
 
   const handleProfileUpdate = (e) => {
     e.preventDefault();
+    
+    const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    if (currentUser) {
+      // Save profile to localStorage
+      localStorage.setItem(`userProfile_${currentUser.id}`, JSON.stringify(profileData));
+      
+      // Update current user name if changed
+      const updatedUser = {
+        ...currentUser,
+        name: `${profileData.firstName} ${profileData.lastName}`.trim(),
+        phone: profileData.phone,
+        dateOfBirth: profileData.dateOfBirth,
+        gender: profileData.gender,
+        bio: profileData.bio
+      };
+      localStorage.setItem('currentUser', JSON.stringify(updatedUser));
+      
+      // Update in users array
+      const users = JSON.parse(localStorage.getItem('users') || '[]');
+      const userIndex = users.findIndex(u => u.id === currentUser.id);
+      if (userIndex !== -1) {
+        users[userIndex] = updatedUser;
+        localStorage.setItem('users', JSON.stringify(users));
+      }
+    }
+    
     setIsEditing(false);
     showToast('Profile updated successfully!', 'success');
   };
 
   const handleProfileChange = (field, value) => {
-    setProfileData((prev) => ({ ...prev, [field]: value }));
+    setProfileData(prev => ({ ...prev, [field]: value }));
   };
 
   const handleAddAddress = () => {
-    const { street, city, state, zipCode } = newAddress;
-    if (!street || !city || !state || !zipCode) {
-      showToast('Please fill every required address field.', 'warning');
-      return;
+    if (newAddress.street && newAddress.city && newAddress.state && newAddress.zipCode) {
+      const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+      idCounter.current += 1;
+      const address = {
+        id: `addr_${idCounter.current}`,
+        ...newAddress,
+        isDefault: addresses.length === 0
+      };
+      
+      const updatedAddresses = [...addresses, address];
+      setAddresses(updatedAddresses);
+      
+      // Save to localStorage
+      localStorage.setItem(`userAddresses_${currentUser.id}`, JSON.stringify(updatedAddresses));
+      
+      setNewAddress({
+        type: 'Home',
+        street: '',
+        city: '',
+        state: '',
+        zipCode: '',
+        country: 'Egypt'
+      });
+      setShowAddressForm(false);
+      showToast('Address added successfully!', 'success');
     }
-
-    const address = {
-      id: Date.now(),
-      ...newAddress,
-      isDefault: addresses.length === 0,
-    };
-
-    setAddresses((prev) => [...prev, address]);
-    setNewAddress(initialNewAddress);
-    setShowAddressForm(false);
-    showToast('Address added successfully!', 'success');
   };
 
   const handleDeleteAddress = (id) => {
-    setAddresses((prev) => prev.filter((address) => address.id !== id));
+    const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    const updatedAddresses = addresses.filter(addr => addr.id !== id);
+    setAddresses(updatedAddresses);
+    localStorage.setItem(`userAddresses_${currentUser.id}`, JSON.stringify(updatedAddresses));
+    showToast('Address deleted successfully!', 'info');
   };
 
   const handleSetDefaultAddress = (id) => {
-    setAddresses((prev) =>
-      prev.map((address) => ({
-        ...address,
-        isDefault: address.id === id,
-      })),
-    );
+    const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    const updatedAddresses = addresses.map(addr => ({
+      ...addr,
+      isDefault: addr.id === id
+    }));
+    setAddresses(updatedAddresses);
+    localStorage.setItem(`userAddresses_${currentUser.id}`, JSON.stringify(updatedAddresses));
+    showToast('Default address updated!', 'success');
   };
 
   const handleAddPaymentMethod = () => {
-    showToast('Payment method integration would go here.', 'info');
+    alert('Payment method integration would go here. In production, use Stripe or similar.');
   };
 
   const handleDeletePaymentMethod = (id) => {
-    setPaymentMethods((prev) => prev.filter((method) => method.id !== id));
+    const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    const updatedPayments = paymentMethods.filter(pm => pm.id !== id);
+    setPaymentMethods(updatedPayments);
+    localStorage.setItem(`userPayments_${currentUser.id}`, JSON.stringify(updatedPayments));
+    showToast('Payment method removed!', 'info');
   };
 
   const handleSetDefaultPayment = (id) => {
-    setPaymentMethods((prev) =>
-      prev.map((method) => ({
-        ...method,
-        isDefault: method.id === id,
-      })),
-    );
+    const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    const updatedPayments = paymentMethods.map(pm => ({
+      ...pm,
+      isDefault: pm.id === id
+    }));
+    setPaymentMethods(updatedPayments);
+    localStorage.setItem(`userPayments_${currentUser.id}`, JSON.stringify(updatedPayments));
+    showToast('Default payment method updated!', 'success');
   };
 
-  const statsCards = [
+  const showToast = (message, type = 'success') => {
+    const toast = document.createElement('div');
+    toast.className = `fixed bottom-4 right-4 z-50 px-4 py-2 rounded-lg shadow-lg text-white ${
+      type === 'success' ? 'bg-green-500' : 'bg-blue-500'
+    } animate-slide-in`;
+    toast.textContent = message;
+    document.body.appendChild(toast);
+    setTimeout(() => toast.remove(), 3000);
+  };
+
+  const getOrderStatusColor = (status) => {
+    const colors = {
+      'Pending': 'bg-yellow-100 text-yellow-800',
+      'Processing': 'bg-blue-100 text-blue-800',
+      'Shipped': 'bg-purple-100 text-purple-800',
+      'Delivered': 'bg-green-100 text-green-800',
+      'Cancelled': 'bg-red-100 text-red-800'
+    };
+    return colors[status] || 'bg-gray-100 text-gray-800';
+  };
+
+  const stats = [
     { title: 'Total Orders', value: orders.length, icon: '📦', color: 'bg-blue-500' },
     { title: 'Wishlist Items', value: wishlistCount, icon: '❤️', color: 'bg-red-500' },
     { title: 'Cart Items', value: cartCount, icon: '🛒', color: 'bg-green-500' },
-    { title: 'Total Spent', value: `$${orders.reduce((sum, order) => sum + (order.total || 0), 0).toFixed(2)}`, icon: '💰', color: 'bg-purple-500' },
+    { title: 'Total Spent', value: `$${orders.reduce((sum, order) => sum + (order.total || 0), 0).toFixed(2)}`, icon: '💰', color: 'bg-purple-500' }
   ];
+
+  if (!currentUser) {
+    return (
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 text-center">
+        <div className="text-6xl mb-4">👤</div>
+        <h2 className="text-2xl font-bold mb-4">Please Login</h2>
+        <p className="text-gray-500 mb-8">You need to be logged in to view your account.</p>
+        <Link to="/login">
+          <button className="bg-red-500 text-white px-6 py-2 rounded-md hover:bg-red-600">Go to Login</button>
+        </Link>
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      {/* Breadcrumb */}
       <div className="mb-6 text-sm text-gray-500">
         Home / <span className="text-black">My Account</span>
       </div>
 
       <div className="flex flex-col lg:flex-row gap-8">
-        <AccountSidebar
+        {/* Sidebar */}
+        <AccountSidebar 
           activeTab={activeTab}
           onTabChange={setActiveTab}
           profileData={profileData}
@@ -145,8 +315,9 @@ const AccountPage = () => {
           cartCount={cartCount}
         />
 
+        {/* Main Content */}
         <div className="lg:w-3/4">
-          <StatsGrid stats={statsCards} />
+          <StatsGrid stats={stats} />
 
           {activeTab === 'profile' && (
             <ProfileSection
@@ -162,9 +333,9 @@ const AccountPage = () => {
             <AddressBookSection
               addresses={addresses}
               showForm={showAddressForm}
-              onToggleForm={() => setShowAddressForm((prev) => !prev)}
+              onToggleForm={() => setShowAddressForm(!showAddressForm)}
               newAddress={newAddress}
-              onAddressChange={(key, value) => setNewAddress((prev) => ({ ...prev, [key]: value }))}
+              onAddressChange={(field, value) => setNewAddress(prev => ({ ...prev, [field]: value }))}
               onSaveAddress={handleAddAddress}
               onDeleteAddress={handleDeleteAddress}
               onSetDefaultAddress={handleSetDefaultAddress}
@@ -184,26 +355,34 @@ const AccountPage = () => {
             <OrdersSection orders={orders} getOrderStatusColor={getOrderStatusColor} />
           )}
 
-          {activeTab === 'returns' && (
+          {(activeTab === 'returns' || activeTab === 'cancellations') && (
             <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-              <h2 className="text-xl font-bold mb-4">My Returns</h2>
+              <h2 className="text-xl font-bold mb-4">
+                {activeTab === 'returns' ? 'My Returns' : 'My Cancellations'}
+              </h2>
               <div className="text-center py-8">
-                <p className="text-gray-500">No active returns</p>
-                <p className="text-sm text-gray-400 mt-2">You have 30 days to return items after delivery</p>
-              </div>
-            </div>
-          )}
-
-          {activeTab === 'cancellations' && (
-            <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-              <h2 className="text-xl font-bold mb-4">My Cancellations</h2>
-              <div className="text-center py-8">
-                <p className="text-gray-500">No cancelled orders</p>
+                <p className="text-gray-500">No {activeTab} found</p>
               </div>
             </div>
           )}
         </div>
       </div>
+
+      <style jsx>{`
+        @keyframes slideIn {
+          from {
+            opacity: 0;
+            transform: translateX(100%);
+          }
+          to {
+            opacity: 1;
+            transform: translateX(0);
+          }
+        }
+        .animate-slide-in {
+          animation: slideIn 0.3s ease-out;
+        }
+      `}</style>
     </div>
   );
 };

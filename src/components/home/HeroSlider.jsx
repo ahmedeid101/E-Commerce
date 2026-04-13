@@ -55,7 +55,7 @@ const HeroSlider = () => {
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
           >
-            <div className="relative h-[400px] md:h-[450px] overflow-hidden">
+            <div className="relative h-100 md:h-112.5 overflow-hidden">
               {heroSlides.map((slide, index) => (
                 <div
                   key={slide.id}
@@ -67,7 +67,7 @@ const HeroSlider = () => {
                       : 'translate-x-full opacity-0'
                   }`}
                 >
-                  <div className={`bg-gradient-to-r ${slide.color} h-full`}>
+                  <div className={`bg-linear-to-r ${slide.color} h-full`}>
                     <div className="flex flex-col md:flex-row items-center justify-between h-full p-8 md:p-12">
                       <div className="text-white z-10 max-w-lg">
                         {slide.badge && (

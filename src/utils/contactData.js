@@ -12,7 +12,7 @@ export const CONTACT_INFO = [
     title: 'Call To Us',
     details: [
       'We are available 24/7, 7 days a week.',
-      'Phone: +20123456789',
+      'Phone: +201092887320',
     ],
     bgColor: 'bg-blue-50'
   },

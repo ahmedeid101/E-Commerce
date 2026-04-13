@@ -51,22 +51,22 @@ const productBrands = {
 // Product-specific images
 const productImages = {
   1: [
-    `/images/products/iPhone/m1.webp`,
-    `/images/products/iPhone/m2.webp`,
-    `/images/products/iPhone/m3.webp`,
-    `/images/products/iPhone/m4.jpg`,
+    `/images/Read_HAVIT_HV-G92_Gamepad.png`,
+    `/images/Red_HAVIT_HV-G92_Gamepad-1.png`,
+    `/images/Red_HAVIT_HV-G92_Gamepad-2.png`,
+    `/images/Red_HAVIT_HV-G92_Gamepad-3.png`,
   ],
   2: [
-    `/images/products/special-offers/o3.jpg`,
-    `/images/products/special-offers/o5.jpg`,
-    `/images/products/special-offers/o21.jpg`,
-    `/images/products/special-offers/o26.jpg`,
+    `/images/AK-900 Wired Keyboard.png`,
+    `/images/AK-900 Wired Keyboard-1.jpg`,
+    `/images/AK-900 Wired Keyboard-2.jpg`,
+    `/images/AK-900 Wired Keyboard-3.jpg`,
   ],
   3: [
-    `/images/products/b8.jpg`,
-    `/images/products/b9.jpg`,
-    `/images/products/iPhone/m1.webp`,
-    `/images/products/iPhone/m2.webp`,
+    `/images/IPS LCD Gaming Monitor.png`,
+    `/images/IPS LCD Gaming Monitor-1.jpg`,
+    `/images/IPS LCD Gaming Monitor-2.jpg`,
+    `/images/IPS LCD Gaming Monitor-3.jpg`,
   ],
   4: [
     `/images/products/laptops/l1.jpg`,

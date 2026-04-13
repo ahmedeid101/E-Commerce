@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { useWishlist } from '../context/WishlistContext';
 import { useProductActions } from '../hooks/useProductActions';
 import HeroSlider from '../components/home/HeroSlider';
@@ -13,16 +13,10 @@ const HomePage = () => {
   const { isInWishlist } = useWishlist();
   const { handleAddToCart, handleWishlistToggle } = useProductActions();
   
-  const [flashProducts, setFlashProducts] = useState([]);
-  const [bestSelling, setBestSelling] = useState([]);
-  const [newArrival, setNewArrival] = useState([]);
-
-  useEffect(() => {
-    const data = fetchMockData();
-    setFlashProducts(data.flashProducts);
-    setBestSelling(data.bestSelling);
-    setNewArrival(data.newArrival);
-  }, []);
+  const data = fetchMockData();
+  const flashProducts = data.flashProducts;
+  const bestSelling = data.bestSelling;
+  const newArrival = data.newArrival;
 
   return (
     <div>

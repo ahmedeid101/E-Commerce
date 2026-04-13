@@ -1,14 +1,15 @@
+// layouts/MainLayout.jsx
 import React from 'react';
 import { Outlet } from 'react-router-dom';
 import Navbar from '../components/navbar/Navbar';
 import Footer from '../components/Footer';
 
-const MainLayout = () => {
+const MainLayout = ({ children }) => {
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />
-      <main className="flex-grow">
-        <Outlet />
+      <main className="grow">
+        {children || <Outlet />}
       </main>
       <Footer />
     </div>
@@ -16,3 +17,22 @@ const MainLayout = () => {
 };
 
 export default MainLayout;
+
+// import React from 'react';
+// import { Outlet } from 'react-router-dom';
+// import Navbar from '../components/navbar/Navbar';
+// import Footer from '../components/Footer';
+
+// const MainLayout = () => {
+//   return (
+//     <div className="min-h-screen flex flex-col">
+//       <Navbar />
+//       <main className="flex-grow">
+//         <Outlet />
+//       </main>
+//       <Footer />
+//     </div>
+//   );
+// };
+
+// export default MainLayout;

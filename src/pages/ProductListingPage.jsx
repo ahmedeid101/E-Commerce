@@ -1,70 +1,37 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useMemo } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import ProductCard from '../components/product/ProductCard';
+import { mockProducts } from '../utils/productHelpers';
 
 const ProductListingPage = () => {
   const [searchParams] = useSearchParams();
-  const [products, setProducts] = useState([]);
-  const [filteredProducts, setFilteredProducts] = useState([]);
-  const [categories, setCategories] = useState([]);
-  const [selectedCategory, setSelectedCategory] = useState('');
+  const categoryParam = searchParams.get('category');
+  const searchParam = searchParams.get('search');
+  
+  const products = mockProducts;
+  const categories = useMemo(() => [...new Set(products.map(p => p.category))], [products]);
+  const [selectedCategory, setSelectedCategory] = useState(categoryParam || '');
   const [priceRange, setPriceRange] = useState({ min: 0, max: 2000 });
   const [sortBy, setSortBy] = useState('default');
-  const [searchQuery, setSearchQuery] = useState('');
+  const searchQuery = searchParam || '';
 
-  const fetchProducts = async () => {
-    const mockProducts = [
-      { id: 1, name: 'HAVIT HV-G92 Gamepad', price: 120, originalPrice: 160, rating: 4.5, reviews: 88, category: 'Electronics', inStock: true, image: 'https://picsum.photos/id/1/300/300' },
-      { id: 2, name: 'AK-900 Wired Keyboard', price: 960, originalPrice: 1160, rating: 4.8, reviews: 75, category: 'Electronics', inStock: true, image: 'https://picsum.photos/id/2/300/300' },
-      { id: 3, name: 'IPS LCD Gaming Monitor', price: 370, originalPrice: 400, rating: 4.6, reviews: 99, category: 'Electronics', inStock: true, image: 'https://picsum.photos/id/3/300/300' },
-      { id: 4, name: 'S-Series Comfort Chair', price: 375, originalPrice: 400, rating: 4.7, reviews: 99, category: 'Furniture', inStock: true, image: 'https://picsum.photos/id/4/300/300' },
-      { id: 5, name: 'The North Coat', price: 260, originalPrice: 360, rating: 4.5, reviews: 85, category: 'Fashion', inStock: true, image: 'https://picsum.photos/id/5/300/300' },
-      { id: 6, name: 'Gucci Duffle Bag', price: 960, originalPrice: 1160, rating: 4.6, reviews: 86, category: 'Fashion', inStock: true, image: 'https://picsum.photos/id/6/300/300' },
-      { id: 7, name: 'RGB Liquid CPU Cooler', price: 160, originalPrice: 170, rating: 4.5, reviews: 85, category: 'Electronics', inStock: true, image: 'https://picsum.photos/id/7/300/300' },
-      { id: 8, name: 'Small BookSelf', price: 360, originalPrice: 360, rating: 4.5, reviews: 85, category: 'Furniture', inStock: true, image: 'https://picsum.photos/id/8/300/300' },
-      { id: 9, name: 'Breed Dry Dog Food', price: 100, rating: 4.2, reviews: 35, category: 'Pets', inStock: true, image: 'https://picsum.photos/id/9/300/300' },
-      { id: 10, name: 'CANON EOS DSLR Camera', price: 380, rating: 4.8, reviews: 85, category: 'Electronics', inStock: true, image: 'https://picsum.photos/id/10/300/300' },
-      { id: 11, name: 'ASUS FHD Gaming Laptop', price: 700, rating: 4.7, reviews: 85, category: 'Electronics', inStock: true, image: 'https://picsum.photos/id/11/300/300' },
-      { id: 12, name: 'Curology Product Set', price: 500, rating: 4.4, reviews: 145, category: 'Beauty', inStock: true, image: 'https://picsum.photos/id/12/300/300' },
-    ];
-    setProducts(mockProducts);
-    setFilteredProducts(mockProducts);
-    
-    const uniqueCategories = [...new Set(mockProducts.map(p => p.category))];
-    setCategories(uniqueCategories);
-  };
-
-  useEffect(() => {
-    const categoryParam = searchParams.get('category');
-    const searchParam = searchParams.get('search');
-    
-    if (categoryParam) setSelectedCategory(categoryParam);
-    if (searchParam) setSearchQuery(searchParam);
-    
-    fetchProducts();
-  }, [searchParams]);
-
-  useEffect(() => {
+  const filteredProducts = useMemo(() => {
     let filtered = [...products];
     
-    // Filter by category
     if (selectedCategory) {
       filtered = filtered.filter(p => p.category === selectedCategory);
     }
     
-    // Filter by search query
     if (searchQuery) {
       filtered = filtered.filter(p => 
         p.name.toLowerCase().includes(searchQuery.toLowerCase())
       );
     }
     
-    // Filter by price
     filtered = filtered.filter(p => 
       p.price >= priceRange.min && p.price <= priceRange.max
     );
     
-    // Sort
     switch (sortBy) {
       case 'price-asc':
         filtered.sort((a, b) => a.price - b.price);
@@ -78,8 +45,8 @@ const ProductListingPage = () => {
       default:
         break;
     }
-    
-    setFilteredProducts(filtered);
+
+    return filtered;
   }, [selectedCategory, searchQuery, priceRange, sortBy, products]);
 
   return (

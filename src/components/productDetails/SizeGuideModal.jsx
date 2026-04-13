@@ -1,6 +1,6 @@
 import React from 'react';
 
-const SizeGuideModal = ({ isOpen, sizes, onClose, rows }) => {
+const SizeGuideModal = ({ isOpen, onClose, rows }) => {
   if (!isOpen) {
     return null;
   }

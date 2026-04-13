@@ -7,7 +7,7 @@ const Banner = () => {
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-      <div className="bg-gradient-to-br from-black to-gray-900 rounded-2xl overflow-hidden shadow-xl">
+      <div className="bg-linear-to-br from-black to-gray-900 rounded-2xl overflow-hidden shadow-xl">
         <div className="flex flex-col lg:flex-row items-center justify-between">
           {/* Left Content */}
           <div className="p-8 lg:w-1/2">

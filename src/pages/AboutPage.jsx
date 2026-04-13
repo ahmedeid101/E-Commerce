@@ -140,14 +140,14 @@ const AboutPage = () => {
 
       {/* Mission & Vision */}
       <section className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-20">
-        <div className="bg-gradient-to-br from-blue-50 to-purple-50 rounded-2xl p-8 shadow-lg">
+        <div className="bg-linear-to-br from-blue-50 to-purple-50 rounded-2xl p-8 shadow-lg">
           <div className="text-5xl mb-4">🎯</div>
           <h3 className="text-2xl font-bold mb-3">Our Mission</h3>
           <p className="text-gray-600 leading-relaxed">
             To provide a seamless, secure, and enjoyable online shopping experience...
           </p>
         </div>
-        <div className="bg-gradient-to-br from-red-50 to-orange-50 rounded-2xl p-8 shadow-lg">
+        <div className="bg-linear-to-br from-red-50 to-orange-50 rounded-2xl p-8 shadow-lg">
           <div className="text-5xl mb-4">👁️</div>
           <h3 className="text-2xl font-bold mb-3">Our Vision</h3>
           <p className="text-gray-600 leading-relaxed">
@@ -157,7 +157,7 @@ const AboutPage = () => {
       </section>
 
       {/* CTA */}
-      <section className="bg-gradient-to-r from-red-500 to-red-600 rounded-2xl p-12 text-center text-white">
+      <section className="bg-linear-to-r from-red-500 to-red-600 rounded-2xl p-12 text-center text-white">
         <h2 className="text-3xl md:text-4xl font-bold mb-4">Join Our Growing Family</h2>
         <p className="text-lg mb-6 opacity-90">Be part of something amazing. Shop with us or become a seller today!</p>
         <div className="flex flex-col sm:flex-row gap-4 justify-center">

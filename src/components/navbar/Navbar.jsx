@@ -1,3 +1,4 @@
+// components/navbar/Navbar.jsx
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useCart } from "../../context/CartContext";
@@ -23,6 +24,9 @@ const Navbar = () => {
   const navigate = useNavigate();
   const { cartCount } = useCart();
   const { wishlistCount } = useWishlist();
+  
+  // Check if user is logged in
+  const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
 
   // Handlers
   const handleSearch = (e) => {
@@ -66,12 +70,14 @@ const Navbar = () => {
             </button>
           </div>
 
-          {/* Categories Dropdown */}
-          <CategoriesDropdown
-            isOpen={isCategoryOpen}
-            onMouseEnter={() => setIsCategoryOpen(true)}
-            onMouseLeave={() => setIsCategoryOpen(false)}
-          />
+          {/* Categories Dropdown - Only show for logged in users */}
+          {isLoggedIn && (
+            <CategoriesDropdown
+              isOpen={isCategoryOpen}
+              onMouseEnter={() => setIsCategoryOpen(true)}
+              onMouseLeave={() => setIsCategoryOpen(false)}
+            />
+          )}
         </div>
 
         {/* Mobile Menu */}

@@ -1,13 +1,13 @@
-import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import Button from '../components/Button';
-import { FcGoogle } from 'react-icons/fc';
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import Button from "../components/Button";
+import { FcGoogle } from "react-icons/fc";
 
 const RegisterPage = () => {
   const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    password: ''
+    name: "",
+    email: "",
+    password: "",
   });
   const [errors, setErrors] = useState({});
   const [isLoading, setIsLoading] = useState(false);
@@ -16,17 +16,17 @@ const RegisterPage = () => {
   const validateForm = () => {
     const newErrors = {};
     if (!formData.name.trim()) {
-      newErrors.name = 'Name is required';
+      newErrors.name = "Name is required";
     }
     if (!formData.email.trim()) {
-      newErrors.email = 'Email is required';
+      newErrors.email = "Email is required";
     } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      newErrors.email = 'Email is invalid';
+      newErrors.email = "Email is invalid";
     }
     if (!formData.password) {
-      newErrors.password = 'Password is required';
+      newErrors.password = "Password is required";
     } else if (formData.password.length < 6) {
-      newErrors.password = 'Password must be at least 6 characters';
+      newErrors.password = "Password must be at least 6 characters";
     }
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -35,196 +35,171 @@ const RegisterPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validateForm()) return;
-    
+
     setIsLoading(true);
-    
+
     // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 800));
-    
+    await new Promise((resolve) => setTimeout(resolve, 800));
+
     // Check if user already exists
-    const users = JSON.parse(localStorage.getItem('users') || '[]');
-    const existingUser = users.find(u => u.email === formData.email);
-    
+    const users = JSON.parse(localStorage.getItem("users") || "[]");
+    const existingUser = users.find((u) => u.email === formData.email);
+
     if (existingUser) {
-      setErrors({ email: 'User already exists with this email' });
+      setErrors({ email: "User already exists with this email" });
       setIsLoading(false);
       return;
     }
-    
-    // Create new user
+
+    // Create new user with complete profile
+    const nameParts = formData.name.trim().split(" ");
     const newUser = {
       id: Date.now(),
       name: formData.name,
+      firstName: nameParts[0] || "",
+      lastName: nameParts.slice(1).join(" ") || "",
       email: formData.email,
       password: formData.password,
-      createdAt: new Date().toISOString()
+      phone: "",
+      dateOfBirth: "",
+      gender: "",
+      bio: "",
+      createdAt: new Date().toISOString(),
     };
-    
+
     users.push(newUser);
-    localStorage.setItem('users', JSON.stringify(users));
-    
+    localStorage.setItem("users", JSON.stringify(users));
+
+    // Initialize user-specific data
+    localStorage.setItem(
+      `userProfile_${newUser.id}`,
+      JSON.stringify({
+        firstName: newUser.firstName,
+        lastName: newUser.lastName,
+        email: newUser.email,
+        phone: "",
+        dateOfBirth: "",
+        gender: "",
+        bio: "",
+      }),
+    );
+
+    localStorage.setItem(`userAddresses_${newUser.id}`, JSON.stringify([]));
+    localStorage.setItem(`userPayments_${newUser.id}`, JSON.stringify([]));
+
     // Auto login after registration
-    localStorage.setItem('isLoggedIn', 'true');
-    localStorage.setItem('currentUser', JSON.stringify(newUser));
-    
-    navigate('/login');
+    localStorage.setItem("isLoggedIn", "true");
+    localStorage.setItem("currentUser", JSON.stringify(newUser));
+
+    navigate("/");
     setIsLoading(false);
   };
 
   const handleGoogleSignUp = () => {
     // In production, implement Google OAuth
-    alert('Google Sign Up - Would integrate with Google OAuth in production');
+    alert("Google Sign Up - Would integrate with Google OAuth in production");
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4 py-12 bg-gray-50">
-      <div className="max-w-md w-full">
-        {/* Header */}
-        <div className="mb-8">
-          <h2 className="text-3xl md:text-4xl font-bold mb-2">Create an account</h2>
-          <p className="text-gray-500">Enter your details below</p>
+    <div className="min-h-screen flex">
+      {/* Left Side - Image */}
+      <div className="hidden lg:flex lg:w-1/2 bg-[#CBE4E8] items-center justify-center p-12">
+        <div className="relative w-full max-w-lg">
+          <img
+            src="images/register.png"
+            alt="Shopping cart with phone and bags"
+            className="w-full h-auto object-contain"
+          />
         </div>
+      </div>
 
-        {/* Register Form */}
-        <form onSubmit={handleSubmit} className="space-y-5">
-          <div>
-            <input
-              type="text"
-              placeholder="Name"
-              value={formData.name}
-              onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-              className={`w-full px-0 py-3 border-b ${errors.name ? 'border-red-500' : 'border-gray-300'} focus:outline-none focus:border-red-500 transition-colors bg-transparent`}
-            />
-            {errors.name && (
-              <p className="text-red-500 text-xs mt-1">{errors.name}</p>
-            )}
-          </div>
-          
-          <div>
-            <input
-              type="email"
-              placeholder="Email or Phone Number"
-              value={formData.email}
-              onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-              className={`w-full px-0 py-3 border-b ${errors.email ? 'border-red-500' : 'border-gray-300'} focus:outline-none focus:border-red-500 transition-colors bg-transparent`}
-            />
-            {errors.email && (
-              <p className="text-red-500 text-xs mt-1">{errors.email}</p>
-            )}
-          </div>
-          
-          <div>
-            <input
-              type="password"
-              placeholder="Password"
-              value={formData.password}
-              onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-              className={`w-full px-0 py-3 border-b ${errors.password ? 'border-red-500' : 'border-gray-300'} focus:outline-none focus:border-red-500 transition-colors bg-transparent`}
-            />
-            {errors.password && (
-              <p className="text-red-500 text-xs mt-1">{errors.password}</p>
-            )}
+      {/* Right Side - Form */}
+      <div className="w-full lg:w-1/2 flex items-center justify-center px-8 py-12 bg-white">
+        <div className="w-full max-w-md">
+          {/* Header */}
+          <div className="mb-12">
+            <h2 className="text-4xl font-semibold mb-6">Create an account</h2>
+            <p className="text-base">Enter your details below</p>
           </div>
 
-          <Button type="submit" variant="primary" className="w-full" disabled={isLoading}>
-            {isLoading ? 'Creating Account...' : 'Create Account'}
-          </Button>
-          
-          <button
-            type="button"
-            onClick={handleGoogleSignUp}
-            className="w-full border border-gray-300 py-3 rounded-md flex items-center justify-center gap-3 hover:bg-gray-50 transition-colors"
-          >
-            <FcGoogle size={22} />
-            <span>Sign up with Google</span>
-          </button>
-          
-          <p className="text-center text-gray-500">
-            Already have account? <Link to="/login" className="text-black font-medium hover:text-red-500 transition-colors">Log in</Link>
-          </p>
-        </form>
+          {/* Register Form */}
+          <form onSubmit={handleSubmit} className="space-y-10">
+            <div>
+              <input
+                type="text"
+                placeholder="Name"
+                value={formData.name}
+                onChange={(e) =>
+                  setFormData({ ...formData, name: e.target.value })
+                }
+                className={`w-full px-0 py-2 border-b ${errors.name ? "border-red-500" : "border-gray-300"} focus:outline-none focus:border-gray-500 transition-colors bg-transparent text-base`}
+              />
+              {errors.name && (
+                <p className="text-red-500 text-xs mt-1">{errors.name}</p>
+              )}
+            </div>
+
+            <div>
+              <input
+                type="email"
+                placeholder="Email or Phone Number"
+                value={formData.email}
+                onChange={(e) =>
+                  setFormData({ ...formData, email: e.target.value })
+                }
+                className={`w-full px-0 py-2 border-b ${errors.email ? "border-red-500" : "border-gray-300"} focus:outline-none focus:border-gray-500 transition-colors bg-transparent text-base`}
+              />
+              {errors.email && (
+                <p className="text-red-500 text-xs mt-1">{errors.email}</p>
+              )}
+            </div>
+
+            <div>
+              <input
+                type="password"
+                placeholder="Password"
+                value={formData.password}
+                onChange={(e) =>
+                  setFormData({ ...formData, password: e.target.value })
+                }
+                className={`w-full px-0 py-2 border-b ${errors.password ? "border-red-500" : "border-gray-300"} focus:outline-none focus:border-gray-500 transition-colors bg-transparent text-base`}
+              />
+              {errors.password && (
+                <p className="text-red-500 text-xs mt-1">{errors.password}</p>
+              )}
+            </div>
+
+            <div className="space-y-4 pt-2">
+              <Button
+                type="submit"
+                variant="primary"
+                className="w-full py-4"
+                disabled={isLoading}
+              >
+                {isLoading ? "Creating Account..." : "Create Account"}
+              </Button>
+
+              <button
+                type="button"
+                onClick={handleGoogleSignUp}
+                className="w-full border border-gray-300 py-4 rounded-md flex items-center justify-center gap-3 hover:bg-gray-50 transition-colors text-base"
+              >
+                <FcGoogle size={20} />
+                <span>Sign up with Google</span>
+              </button>
+            </div>
+
+            <p className="text-center text-gray-600 text-base">
+              Already have account?{" "}
+              <Link to="/login" className="font-medium hover:underline ml-3">
+                Log in
+              </Link>
+            </p>
+          </form>
+        </div>
       </div>
     </div>
   );
 };
 
 export default RegisterPage;
-
-// import React, { useState } from 'react';
-// import { Link, useNavigate } from 'react-router-dom';
-// import Button from '../components/Button';
-
-// const RegisterPage = () => {
-//   const [formData, setFormData] = useState({
-//     name: '',
-//     email: '',
-//     password: ''
-//   });
-//   const navigate = useNavigate();
-
-//   const handleSubmit = (e) => {
-//     e.preventDefault();
-//     if (formData.name && formData.email && formData.password) {
-//       localStorage.setItem('isLoggedIn', 'true');
-//       localStorage.setItem('userName', formData.name);
-//       localStorage.setItem('userEmail', formData.email);
-//       navigate('/');
-//     }
-//   };
-
-//   return (
-//     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-//       <div className="max-w-md mx-auto">
-//         <div className="mb-8">
-//           <h2 className="text-3xl font-bold mb-2">Create an account</h2>
-//           <p className="text-gray-500">Enter your details below</p>
-//         </div>
-
-//         <form onSubmit={handleSubmit} className="space-y-6">
-//           <div>
-//             <input
-//               type="text"
-//               placeholder="Name"
-//               value={formData.name}
-//               onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-//               className="w-full px-4 py-3 border-b border-gray-300 focus:outline-none focus:border-red-500"
-//               required
-//             />
-//           </div>
-//           <div>
-//             <input
-//               type="email"
-//               placeholder="Email or Phone Number"
-//               value={formData.email}
-//               onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-//               className="w-full px-4 py-3 border-b border-gray-300 focus:outline-none focus:border-red-500"
-//               required
-//             />
-//           </div>
-//           <div>
-//             <input
-//               type="password"
-//               placeholder="Password"
-//               value={formData.password}
-//               onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-//               className="w-full px-4 py-3 border-b border-gray-300 focus:outline-none focus:border-red-500"
-//               required
-//             />
-//           </div>
-//           <Button type="submit" variant="primary" className="w-full">
-//             Create Account
-//           </Button>
-//           <button className="w-full border border-gray-300 py-2 rounded-md flex items-center justify-center space-x-2 hover:bg-gray-50">
-//             <span>G</span>
-//             <span>Sign up with Google</span>
-//           </button>
-//           <p className="text-center text-gray-500">
-//             Already have account? <Link to="/login" className="text-black underline">Log in</Link>
-//           </p>
-//         </form>
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default RegisterPage;
