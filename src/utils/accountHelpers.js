@@ -11,13 +11,13 @@ export const getOrderStatusColor = (status) => {
 };
 
 export const initialProfileData = {
-  firstName: 'John',
-  lastName: 'Doe',
-  email: 'john.doe@example.com',
-  phone: '+1 234 567 8900',
-  dateOfBirth: '1990-01-01',
+  firstName: 'Ahmed',
+  lastName: 'Eid',
+  email: 'ahmed.eid@gmail.com',
+  phone: '+20 109 288 7320',
+  dateOfBirth: '2000-07-26',
   gender: 'male',
-  bio: 'Passionate shopper and tech enthusiast.',
+  bio: 'Passionate software Engineer and tech enthusiast.',
 };
 
 export const initialNewAddress = {
@@ -26,5 +26,5 @@ export const initialNewAddress = {
   city: '',
   state: '',
   zipCode: '',
-  country: 'USA',
+  country: 'Egypt',
 };

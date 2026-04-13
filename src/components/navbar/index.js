@@ -5,3 +5,4 @@ export { default as TopBanner } from './TopBanner';
 export { default as CategoriesDropdown } from './CategoriesDropdown';
 export { default as MobileMenu } from './MobileMenu';
 export { default as NavbarContent } from './NavbarContent';
+export { default as AccountDropdown } from './AccountDropdown';
