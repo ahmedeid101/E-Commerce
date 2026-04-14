@@ -29,7 +29,7 @@ const CartPage = () => {
       </div>
 
       <div className="overflow-x-auto">
-        <table className="w-full">
+        <table className="w-full hidden md:table">
           <thead className="border-b">
             <tr>
               <th className="text-left py-4">Product</th>
@@ -85,6 +85,53 @@ const CartPage = () => {
             ))}
           </tbody>
         </table>
+
+        {/* Mobile Cart Items */}
+        <div className="md:hidden space-y-4">
+          {cartItems.map((item) => (
+            <div key={item.id} className="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
+              <div className="flex items-center space-x-4 mb-4">
+                <img
+                  src={item.image}
+                  alt={item.name}
+                  className="w-16 h-16 object-cover rounded"
+                />
+                <div className="flex-1">
+                  <h3 className="font-medium">{item.name}</h3>
+                  <p className="text-gray-600">${item.price}</p>
+                </div>
+                <button
+                  onClick={() => removeFromCart(item.id)}
+                  className="text-red-500 hover:text-red-700 text-xl"
+                >
+                  ✕
+                </button>
+              </div>
+
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-2">
+                  <button
+                    onClick={() => updateQuantity(item.id, item.quantity - 1)}
+                    className="w-8 h-8 border rounded-md hover:bg-gray-100"
+                  >
+                    -
+                  </button>
+                  <span className="w-12 text-center">{item.quantity}</span>
+                  <button
+                    onClick={() => updateQuantity(item.id, item.quantity + 1)}
+                    className="w-8 h-8 border rounded-md hover:bg-gray-100"
+                  >
+                    +
+                  </button>
+                </div>
+                <div className="text-right">
+                  <p className="font-semibold">${(item.price * item.quantity).toFixed(2)}</p>
+                  <p className="text-sm text-gray-500">Subtotal</p>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
 
       <div className="flex flex-col sm:flex-row justify-between items-center gap-4 mt-10">

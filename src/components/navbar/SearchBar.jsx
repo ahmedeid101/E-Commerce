@@ -11,7 +11,7 @@ const SearchBar = ({ value, onChange, onSubmit, fullWidth = false }) => (
       value={value}
       onChange={onChange}
       className={`px-4 py-2 bg-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 transition-all ${
-        fullWidth ? 'w-full' : 'w-64'
+        fullWidth ? 'w-full' : 'w-48 lg:w-64 xl:w-80'
       }`}
     />
     <button

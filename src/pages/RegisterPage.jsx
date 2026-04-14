@@ -91,12 +91,12 @@ const RegisterPage = () => {
     localStorage.setItem("isLoggedIn", "true");
     localStorage.setItem("currentUser", JSON.stringify(newUser));
 
-    navigate("/");
+    navigate("/login");
     setIsLoading(false);
   };
 
   const handleGoogleSignUp = () => {
-    // In production, implement Google OAuth
+    // In production, i will implement Google OAuth
     alert("Google Sign Up - Would integrate with Google OAuth in production");
   };
 
